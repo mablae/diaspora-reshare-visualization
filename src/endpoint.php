@@ -1,19 +1,8 @@
 <?php
 
-/* Ajax-Interface:
- *
- * command = "start"
- * ++ Startet einen neuen Lauf.
- * 		url = url des Beitrags, mit dem gestartet werden soll
- *
- *
- */
 
-require_once('functions.php');
 require_once('DiasporaWalker.php');
 require_once('ResultTree.php');
-
-
 
 
 header('Cache-Control: no-cache, must-revalidate');
