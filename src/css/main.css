@@ -1,0 +1,24 @@
+
+
+#mainBox {
+
+    margin-top: 30px;
+}
+
+.node {
+    fill: #333;
+
+
+}
+
+.link {
+    stroke: #ccc;
+    stroke-width: 1.5px;
+
+}
+
+
+.node-rect {
+    fill: #eee;
+
+}
