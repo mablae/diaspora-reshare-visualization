@@ -11,12 +11,20 @@ class DiasporaWalker
     const MODE_TOROOT = "toroot"; // Gehe zur Wurzel des Baums
     const MODE_TREE   = "tree";   // Untersuche den Knoten auf Blatt-Knoten
 
+
+    // Holds downloaded data
     private $cache;
+
+    // final nodes and links
     private $resultTree;
+
+    // worker list
     private $todo;
 
 
     /**
+     * Recursive Walker
+     *
      * @param string $startUrl
      * @param string $mode
      */
@@ -37,7 +45,7 @@ class DiasporaWalker
 
 
     /**
-     * Holt eine Webseite und cached sie
+     * Downloads a websites and caches it. Returns data from cache, if URL already has been loaded
      *
      * @param string $url
      * @return string
@@ -48,9 +56,6 @@ class DiasporaWalker
             return $this->cache[$url];
         }
 
-        // Hole den Inhalt der Webseite
-        //$content = file_get_contents($url);
-
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -60,9 +65,7 @@ class DiasporaWalker
         $content = curl_exec($ch);
         curl_close($ch);
 
-
-        // Speicher das in den Cache
-        $cache[$url] = $content;
+        $this->cache[$url] = $content;
         return $content;
     }
 
@@ -74,7 +77,6 @@ class DiasporaWalker
      */
     private function isReshare($json)
     {
-        // Wenn das Root-Element nicht leer ist, ist es ein Reshare.
         return ($json->post_type == "Reshare") ? true : false;
     }
 
@@ -94,8 +96,6 @@ class DiasporaWalker
         // Gibt es noch Jobs?
         if (!empty($this->todo)) {
             $job = array_shift($this->todo);
-
-
             if ($job['job'] == 'toroot') {
                 $this->crawlToRoot($job['data']);
             } else {
@@ -103,6 +103,8 @@ class DiasporaWalker
             }
         }
         if (!empty($this->todo)) {
+
+            // Call dispatch() again until all jobs done...
             $this->dispatch();
         }
 
@@ -138,8 +140,6 @@ class DiasporaWalker
                 'parent' => '0',
                 'avatar' => $page->root->author->avatar->small
             ));
-
-            //echo "Reshare: $author teilt Beitrag von $originalAuthor";
 
             // Anweisungen fürs Ajax
             return json_encode(
@@ -201,10 +201,7 @@ class DiasporaWalker
         $linkToPost = "https://$host/posts/" . $data['guid'];
 
         // Anweisungen fürs Ajax
-
         $node_data = array(
-
-
             'parent' => $data['parent'],
             'guid' => $data['guid'],
             'walkLevel' => $data['parent'],
@@ -217,6 +214,7 @@ class DiasporaWalker
             'htmlLink' => '<a href="' . $linkToPost . '" target="_blank"><img src="' . $data['avatar'] . '"><span><img src="img/heart.png">' . $sumLikes . '<br /><img src="img/comment.png">' . $sumComments . '</span></a>'
         );
 
+        // Save the results to our ResultTree class
         $this->resultTree->addNode($node_data);
         $this->resultTree->addLink($node_data);
     }
@@ -224,12 +222,24 @@ class DiasporaWalker
 
     /**
      * Saves jobs to the Queue, which is processed by dispatch()
+     *
+     * @return boolean
      */
     private function pushTodo($job, $data)
     {
-        array_push($this->todo, array('job' => $job, 'data' => $data));
+        if (array_push($this->todo, array('job' => $job, 'data' => $data))) {
+            return true;
+
+        }
+        return false;
     }
 
+
+    /**
+     * Wrapper method to recieve the results
+     *
+     * @return string
+     */
     public function getResults() {
         return $this->resultTree->getJson();
     }
