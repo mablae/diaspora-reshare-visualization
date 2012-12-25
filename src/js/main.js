@@ -9,7 +9,7 @@ $(function() {
         $('#mainBox svg').remove();
 
         var width =  viewportWidth
-            height = viewportHeight - 110 ;
+            height = viewportHeight - 120 ;
 
         var color = d3.scale.category20();
 
