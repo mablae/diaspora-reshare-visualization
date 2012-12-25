@@ -37,8 +37,9 @@
 <div id="topNav">
         <div  class="container">
             <div class="row">
-                <div class="span6"> <h2>Diaspora reShareViewer</h2>
-                    <p>A simple D3.js powered graph to follow your posts. (<a href="javascript:window.location.href = 'http://mablae.taurus.uberspace.de/diaspora_vis/?startUrl='+encodeURIComponent(window.location.href);void 0;">Bookmarklet</a>
+                <div class="span6"><h4>Diaspora reShareViewer</h4>
+                    <p>A simple D3.js powered graph to follow your posts.<br>
+                       (Bookmarklet for your convenience: <a href="javascript:window.location.href = 'http://mablae.taurus.uberspace.de/diaspora_vis/?startUrl='+encodeURIComponent(window.location.href+'.json');void 0;">Diaspora ReShare Viewer</a>
                         )</p></div>
                 <div class="span6"><form class="form-horizontal" id="searchForm">
                     <label for="startUrl" class="">Please enter the URL for your Diaspora Post</label>
