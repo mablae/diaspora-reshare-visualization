@@ -61,7 +61,7 @@ $(function() {
             node.append("svg:rect")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("height", 32)
+                .attr("height", 48)
                 .attr("width", 140)
                 .attr("class", "node-rect");
 
@@ -77,6 +77,10 @@ $(function() {
                 })
                 .attr("height", function (d) {
                     return 32
+                })
+                .attr('class', 'avatarImage')
+                .on('click', function(){
+                    window.location.href='localhost';
                 });
 
             node.append("circle")
@@ -101,6 +105,12 @@ $(function() {
                 .attr("dy", '1em')
                 .text(function (d) {
                     return 'Comments: ' + d.sumComments.toString()
+                });
+            node.append("svg:text")
+                .attr("dx", 42)
+                .attr("dy", '3em')
+                .text(function (d) {
+                    return 'Reshares: ' + d.sumReshares.toString()
                 });
 
 

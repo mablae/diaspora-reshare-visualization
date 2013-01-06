@@ -1,18 +1,19 @@
 html, body {
     overflow: hidden;
+    background-color: #222;
 }
 
 #topNav {
     position: absolute;
-    z-index: 9999;
+    z-index: 444;
     width: 100%;
     height: 90px;
-    background-color: rgba(29, 29, 29, 0.2);
+    background-color: #333;
     padding: 15px;
     overflow: hidden;
     top: 0px;
     left: 0px;
-
+    color: #dddddd;
 }
 
 
@@ -35,8 +36,8 @@ html, body {
 }
 
 .link {
-    stroke: #ccc;
-    stroke-width: 1.5px;
+    stroke: #555;
+    stroke-width: 2px;
 
 }
 
@@ -44,4 +45,17 @@ html, body {
 .node-rect {
     fill: #eee;
 
+}
+
+.githubForkMeBagde {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    z-index: 555;
+}
+
+.avatarImage {
+    border: 2px solid red;
 }
