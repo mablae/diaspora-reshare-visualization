@@ -33,13 +33,13 @@
 <![endif]-->
 
 <!-- Add your site or application content here -->
-
+<a href="https://github.com/mablae/diaspora-reshare-visualization"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 555;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 <div id="topNav">
         <div  class="container">
             <div class="row">
                 <div class="span6"><h4>Diaspora reShareViewer</h4>
                     <p>A simple D3.js powered graph to follow your posts.<br>
-                       (Bookmarklet for your convenience: <a href="javascript:window.location.href = 'http://mablae.taurus.uberspace.de/diaspora_vis/?startUrl='+encodeURIComponent(window.location.href+'.json');void 0;">Diaspora ReShare Viewer</a>
+                       (<strong>Bookmarklet</strong> for your convenience: <a href="javascript:window.location.href = 'http://mablae.taurus.uberspace.de/diaspora_vis/?startUrl='+encodeURIComponent(window.location.href+'.json');void 0;">Diaspora ReShare Viewer</a>
                         )</p></div>
                 <div class="span6"><form class="form-horizontal" id="searchForm">
                     <label for="startUrl" class="">Please enter the URL for your Diaspora Post</label>
