@@ -43,7 +43,7 @@ html, body {
 
 
 .node-rect {
-    fill: #eee;
+    fill: #111;
 
 }
 
@@ -58,4 +58,21 @@ html, body {
 
 .avatarImage {
     border: 2px solid red;
+}
+
+.textLabel {
+    stroke: #08c;
+    fill: #00a8f8;
+}
+
+.tooltipDiv {
+    color: #ddd;
+    background-color: #111;
+    border-radius: 5px;
+    z-index: 666;
+    left: 20px;
+    top: 140px;
+    padding: 10px;
+    position: absolute;
+
 }

@@ -13,6 +13,11 @@ $(function() {
 
         var color = d3.scale.category20();
 
+        var tooltipDiv = d3.select("body").append("div")
+            .attr("class", "tooltipDiv")
+            .style("opacity", 1e-6)
+
+            ;
         var force = d3.layout.force()
             .linkDistance(150)
             .charge(-1000)
@@ -28,6 +33,22 @@ $(function() {
             vis.attr("transform",
                 "translate(" + d3.event.translate + ")"
                     + " scale(" + d3.event.scale + ")");
+        };
+
+        var openInfos = function () {
+            tooltipDiv.transition()
+                .duration(300)
+                .style("opacity", 1)
+                .text("Info about ")
+
+        };
+
+
+
+        var closeInfos = function() {
+            tooltipDiv.transition()
+                .duration(300)
+                .style("opacity", 1e-6);
         };
 
         d3.json(startUrl, function(graph) {
@@ -52,17 +73,23 @@ $(function() {
             var node = svg.selectAll("g.node")
                 .data(graph.nodes)
                 .enter().append("g")
-                .call(d3.behavior.zoom().on("zoom", redraw))
+                //.call(d3.behavior.zoom().on("zoom", redraw))
                 .attr("class", "node")
+                .on("mouseover", openInfos)
+                //.on("mousemove", function(d){mousemove(d);})
+                .on("mouseout", closeInfos)
                 //.on('click', click)
                 .call(force.drag);
 
 
             node.append("svg:rect")
+
                 .attr("x", 0)
                 .attr("y", 0)
+                .attr("rx", 5)
+                .attr("ry", 5)
                 .attr("height", 48)
-                .attr("width", 140)
+                .attr("width", 48)
                 .attr("class", "node-rect");
 
 
@@ -71,7 +98,7 @@ $(function() {
                     return d.avatar
                 })
                 .attr("x", 8)
-                .attr("y", -8)
+                .attr("y", 8)
                 .attr("width", function (d) {
                     return 32
                 })
@@ -79,9 +106,7 @@ $(function() {
                     return 32
                 })
                 .attr('class', 'avatarImage')
-                .on('click', function(){
-                    window.location.href='localhost';
-                });
+                ;
 
             node.append("circle")
                 .attr("class", "node-circle")
@@ -93,9 +118,14 @@ $(function() {
                 });
 
 
+
+
+            /*
+
             node.append("svg:text")
                 .attr("dx", 42)
                 .attr("dy", '2em')
+                .attr('class', 'textLabel textLabelLikes')
                 .text(function (d) {
                     return 'Likes: ' + d.sumLikes.toString()
                 });
@@ -103,17 +133,19 @@ $(function() {
             node.append("svg:text")
                 .attr("dx", 42)
                 .attr("dy", '1em')
+                .attr('class', 'textLabel textLabelComments')
                 .text(function (d) {
                     return 'Comments: ' + d.sumComments.toString()
                 });
             node.append("svg:text")
                 .attr("dx", 42)
                 .attr("dy", '3em')
+                .attr('class', 'textLabel textLabelReshares')
                 .text(function (d) {
                     return 'Reshares: ' + d.sumReshares.toString()
                 });
 
-
+              */
             force.on("tick", function () {
                 link.attr("x1", function (d) {
                     return d.source.x;
