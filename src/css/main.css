@@ -61,6 +61,11 @@ html, body {
     border: 2px solid red;
 }
 
+.tooltipAvatar {
+    float: left;
+    padding-right: 1em;
+    height: 4em;
+}
 .textLabel {
     stroke: #08c;
     fill: #00a8f8;

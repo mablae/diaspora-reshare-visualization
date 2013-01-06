@@ -35,16 +35,19 @@ $(function() {
                     + " scale(" + d3.event.scale + ")");
         };
 
-        var openInfos = function () {
+        var openInfos = function (d) {
+            d3.select('.tooltipDiv').html('<h4>Post ID: ' + d.data.guid.toString() + '</h4><p><img src="'+ d.data.avatar+'" class="tooltipAvatar" /> Reshares: '+d.sumReshares.toString()+'<br>Likes: '+d.sumLikes.toString()+'<br>Comments: '+ d.sumComments.toString()+'</p>');
+            console.log(d);
             tooltipDiv.transition()
                 .duration(300)
-                .style("opacity", 1)
-                .text("Info about ")
+                .style("opacity", 1);
+
+
 
         };
 
 
-        var closeInfos = function () {
+        var closeInfos = function (d) {
             tooltipDiv.transition()
                 .duration(300)
                 .style("opacity", 1e-6);
