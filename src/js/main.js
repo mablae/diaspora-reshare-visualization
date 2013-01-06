@@ -8,14 +8,14 @@ $(function() {
     var createGraph = function (startUrl) {
         $('#mainBox svg').remove();
 
-        var width =  viewportWidth
-            height = viewportHeight - 120 ;
+        var width = viewportWidth
+        var height = viewportHeight - 120;
 
         var color = d3.scale.category20();
 
         var tooltipDiv = d3.select("body").append("div")
-            .attr("class", "tooltipDiv")
-            .style("opacity", 1e-6)
+                .attr("class", "tooltipDiv")
+                .style("opacity", 1e-6)
 
             ;
         var force = d3.layout.force()
@@ -44,15 +44,13 @@ $(function() {
         };
 
 
-
-        var closeInfos = function() {
+        var closeInfos = function () {
             tooltipDiv.transition()
                 .duration(300)
                 .style("opacity", 1e-6);
         };
 
-        d3.json(startUrl, function(graph) {
-
+        d3.json(startUrl, function (graph) {
 
 
             $('#loader').fadeOut();
@@ -63,10 +61,11 @@ $(function() {
                 .start();
 
 
-            var link = svg.selectAll("line.link")
+            var link = svg.selectAll("path.link")
                     .data(graph.links)
-                    .enter().append("line")
+                    .enter().append("path")
                     .attr("class", "link")
+                    .attr("d", "M0,-5L10,0L0,5")
                 ;
 
 
@@ -106,7 +105,7 @@ $(function() {
                     return 32
                 })
                 .attr('class', 'avatarImage')
-                ;
+            ;
 
             node.append("circle")
                 .attr("class", "node-circle")
@@ -118,63 +117,54 @@ $(function() {
                 });
 
 
-
-
             /*
 
-            node.append("svg:text")
-                .attr("dx", 42)
-                .attr("dy", '2em')
-                .attr('class', 'textLabel textLabelLikes')
-                .text(function (d) {
-                    return 'Likes: ' + d.sumLikes.toString()
-                });
+             node.append("svg:text")
+             .attr("dx", 42)
+             .attr("dy", '2em')
+             .attr('class', 'textLabel textLabelLikes')
+             .text(function (d) {
+             return 'Likes: ' + d.sumLikes.toString()
+             });
 
-            node.append("svg:text")
-                .attr("dx", 42)
-                .attr("dy", '1em')
-                .attr('class', 'textLabel textLabelComments')
-                .text(function (d) {
-                    return 'Comments: ' + d.sumComments.toString()
-                });
-            node.append("svg:text")
-                .attr("dx", 42)
-                .attr("dy", '3em')
-                .attr('class', 'textLabel textLabelReshares')
-                .text(function (d) {
-                    return 'Reshares: ' + d.sumReshares.toString()
-                });
+             node.append("svg:text")
+             .attr("dx", 42)
+             .attr("dy", '1em')
+             .attr('class', 'textLabel textLabelComments')
+             .text(function (d) {
+             return 'Comments: ' + d.sumComments.toString()
+             });
+             node.append("svg:text")
+             .attr("dx", 42)
+             .attr("dy", '3em')
+             .attr('class', 'textLabel textLabelReshares')
+             .text(function (d) {
+             return 'Reshares: ' + d.sumReshares.toString()
+             });
 
-              */
+             */
             force.on("tick", function () {
-                link.attr("x1", function (d) {
-                    return d.source.x;
-                })
-                    .attr("y1", function (d) {
-                        return d.source.y;
-                    })
-                    .attr("x2", function (d) {
-                        return d.target.x;
-                    })
-                    .attr("y2", function (d) {
-                        return d.target.y;
-                    });
-
+                link.attr("d", function (d) {
+                    var dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+                });
                 node.attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
             });
+
+
         });
-
-
     };
-
-    $('#searchForm').submit(function(e) {
-        e.preventDefault();
-        loader.fadeIn(function() {
-            url =  'endpoint.php?startUrl='+  $('#startUrl').val();
-            createGraph(url);
+        $('#searchForm').submit(function (e) {
+            e.preventDefault();
+            loader.fadeIn(function () {
+                url = 'endpoint.php?startUrl=' + $('#startUrl').val();
+                createGraph(url);
+            });
         });
-    });
+
 });
 
