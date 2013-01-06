@@ -65,7 +65,7 @@
 
 
 <script src="js/jquery-1.8.3.min.js"></script>
-<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/main.js?v=0.0.1"></script>
 
