@@ -113,7 +113,7 @@ $(function() {
             node.append("circle")
                 .attr("class", "node-circle")
                 .attr("r", function (d) {
-                    return Math.sqrt(d.sumReshares * 2.5) + 8
+                    return (Math.sqrt(d.sumComments) +2) * 3
                 })
                 .style("fill", function (d) {
                     return color(d.group);
