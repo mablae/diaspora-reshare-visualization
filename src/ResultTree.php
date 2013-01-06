@@ -25,8 +25,8 @@ class ResultTree {
             'sumLikes' => $node_data['sumLikes'],
             'sumComments' => $node_data['sumComments'],
             'avatar' => $node_data['avatar'],
-            'data' => $node_data['data']
-
+            'data' => $node_data,
+            'linkToPost' => $node_data['linkToPost']
         );
 
 

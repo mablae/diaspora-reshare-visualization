@@ -13,12 +13,21 @@ class DiasporaWalker
 
 
     // Holds downloaded data
+    /**
+     * @var array
+     */
     private $cache;
 
     // final nodes and links
+    /**
+     * @var ResultTree
+     */
     private $resultTree;
 
     // worker list
+    /**
+     * @var array
+     */
     private $todo;
 
 
@@ -39,6 +48,9 @@ class DiasporaWalker
 
     }
 
+    /**
+     *
+     */
     public function start() {
         $this->dispatch();
     }
@@ -80,17 +92,30 @@ class DiasporaWalker
         return ($json->post_type == "Reshare") ? true : false;
     }
 
+    /**
+     * @param $host
+     * @param $guid
+     * @return string
+     */
     private function buildPostQuery($host, $guid)
     {
         return "https://$host/posts/$guid.json";
     }
 
+    /**
+     * @param $host
+     * @param $guid
+     * @return string
+     */
     private function buildInteractionsQuery($host, $guid)
     {
         return "https://$host/posts/$guid/interactions.json";
     }
 
 
+    /**
+     *
+     */
     private function dispatch()
     {
         // Gibt es noch Jobs?
@@ -155,6 +180,8 @@ class DiasporaWalker
                 'url' => $this->buildInteractionsQuery($host, $guid),
                 'guid' => $guid,
                 'parent' => '0',
+                'urlPost' => $this->buildPostLink($host, $guid),
+                'urlComments' => $this->buildCommentsLink($host, $guid),
                 'avatar' => $page->author->avatar->small
             ));
 
@@ -210,7 +237,6 @@ class DiasporaWalker
             'sumReshares' => $sumReshares,
             'sumComments' => $sumComments,
             'avatar' => $data['avatar'],
-            'data' => $data,
             'htmlLink' => '<a href="' . $linkToPost . '" target="_blank"><img src="' . $data['avatar'] . '"><span><img src="img/heart.png">' . $sumLikes . '<br /><img src="img/comment.png">' . $sumComments . '</span></a>'
         );
 
@@ -242,6 +268,22 @@ class DiasporaWalker
      */
     public function getResults() {
         return $this->resultTree->getJson();
+    }
+
+    /**
+     * @param $host
+     * @param $guid
+     */
+    private function buildPostLink($host, $guid)
+    {
+    }
+
+    /**
+     * @param $host
+     * @param $guid
+     */
+    private function buildCommentsLink($host, $guid)
+    {
     }
 
 }

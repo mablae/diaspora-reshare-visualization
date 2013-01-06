@@ -29,15 +29,16 @@ $(function() {
             .attr("height", height);
 
         var redraw = function redraw() {
-            console.log("here", d3.event.translate, d3.event.scale);
+
             vis.attr("transform",
                 "translate(" + d3.event.translate + ")"
                     + " scale(" + d3.event.scale + ")");
         };
 
         var openInfos = function (d) {
+
+            d3.select(this).style('stroke-width', 3).style('stroke', '#eeeeee');
             d3.select('.tooltipDiv').html('<h4>Post ID: ' + d.data.guid.toString() + '</h4><p><img src="'+ d.data.avatar+'" class="tooltipAvatar" /> Reshares: '+d.sumReshares.toString()+'<br>Likes: '+d.sumLikes.toString()+'<br>Comments: '+ d.sumComments.toString()+'</p>');
-            console.log(d);
             tooltipDiv.transition()
                 .duration(300)
                 .style("opacity", 1);
@@ -46,8 +47,13 @@ $(function() {
 
         };
 
+        var openLink = function(d) {
+
+            window.location.href = d.data.linkToPost.toString();
+        };
 
         var closeInfos = function (d) {
+            d3.select(this).style('stroke-width', 0).style('stroke', 'none');
             tooltipDiv.transition()
                 .duration(300)
                 .style("opacity", 1e-6);
@@ -78,9 +84,8 @@ $(function() {
                 //.call(d3.behavior.zoom().on("zoom", redraw))
                 .attr("class", "node")
                 .on("mouseover", openInfos)
-                //.on("mousemove", function(d){mousemove(d);})
                 .on("mouseout", closeInfos)
-                //.on('click', click)
+                .on('click', openLink)
                 .call(force.drag);
 
 
