@@ -22,7 +22,7 @@
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css?v=0.0.1">
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
@@ -65,9 +65,9 @@
 
 
 <script src="js/jquery-1.8.3.min.js"></script>
-<script src="js/d3.v3.js"></script>
+<script src="js/d3.v3.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
+<script src="js/main.js?v=0.0.1"></script>
 
 <?php
 
