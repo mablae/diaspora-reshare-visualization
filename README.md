@@ -1,8 +1,18 @@
 diaspora-reshare-visualization
 ==============================
+Forked from https://github.com/mablae/diaspora-reshare-visualization
 
-D3.js powered Graph-Visualation for Reshares of Diaspora Posts.
+A very interesting social use for data driven documents 
 
-Live Usage: http://mablae.taurus.uberspace.de/diaspora_vis/
+This master branch is pretty much identical to the source    
+repo except for some recent updates to javascript components  
 
-Based on the idea of @Faldrian posted here: https://pod.geraspora.de/posts/965127
+It will keep out-sync with pull requests to that repo        
+
+The local branch contains commits made while setting it up at   
+http://rsv.diapod.net/?startUrl=https://rsv.diapod.net/posts/179631   
+
+
+
+
+
