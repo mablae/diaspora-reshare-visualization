@@ -10,7 +10,7 @@ repo except for some recent updates to javascript components
 It will keep out-sync with pull requests to that repo        
 
 The local branch contains commits made while setting it up at   
-http://rsv.diapod.net/?startUrl=https://rsv.diapod.net/posts/179631   
+http://rsv.diapod.net/?startUrl=https://diapod.net/posts/179631   
 
 
 
