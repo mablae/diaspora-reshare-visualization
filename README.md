@@ -8,10 +8,7 @@ This master branch is pretty much identical to the source repo except for some r
 
 It will keep out-sync with pull requests to that repo   
 
-The local branch contains commits made while setting it up at http://rsv.diapod.net  
-
-
-
+The local branch https://github.com/rivendale2010/diaspora-reshare-visualization/tree/local contains commits made while setting it up at http://rsv.diapod.net  
 
 
 
