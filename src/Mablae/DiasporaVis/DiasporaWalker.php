@@ -49,7 +49,7 @@ class DiasporaWalker
 
 
         $this->logger = new Logger('DiasporaWalker');
-        $this->logger->pushHandler(new StreamHandler('../logs/log.txt', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler('../../logs/log.txt', Logger::DEBUG));
 
     }
 
