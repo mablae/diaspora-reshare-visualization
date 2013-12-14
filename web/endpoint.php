@@ -4,6 +4,8 @@ require_once '../vendor/autoload.php';
 
 use Mablae\DiasporaVis\DiasporaWalker;
 use Mablae\DiasporaVis\ResultTree;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 // Set correct json headers and disable caching
 header('Cache-Control: no-cache, must-revalidate');
@@ -16,8 +18,13 @@ if ($url !== null) {
     // create Result Object for DI
     $results = new ResultTree();
 
+    $this->logger = new Logger('DiasporaWalker');
+    $this->logger->pushHandler(new StreamHandler('../../../logs/log.txt', Logger::DEBUG));
+
+    $this->logger->addDebug("enpoint.php called with startUrl=".$url);
+
     // Creating the recursive walker
-    $dispatcher = new DiasporaWalker($results, $url, DiasporaWalker::MODE_TOROOT);
+    $dispatcher = new DiasporaWalker($logger, $results, $url, DiasporaWalker::MODE_TOROOT);
     $dispatcher->start();
 
     // return our json-encoded array

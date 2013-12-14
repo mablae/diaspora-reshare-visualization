@@ -35,26 +35,25 @@ class DiasporaWalker
     /**
      * Recursive Walker
      *
+     * @param Logger $logger
      * @param ResultTree $resultTree
      * @param string $startUrl
      * @param string $mode
      */
-    public function __construct(ResultTree $resultTree, $startUrl = null, $mode = null)
+    public function __construct(Logger $logger, ResultTree $resultTree, $startUrl = null, $mode = null)
     {
 
         $this->resultTree = $resultTree;
         $this->cache = array();
         $this->todo = array();
         $this->pushTodo($mode, array('url' => $startUrl));
+        $this->logger = $logger;
 
-
-        $this->logger = new Logger('DiasporaWalker');
-        $this->logger->pushHandler(new StreamHandler('../../logs/log.txt', Logger::DEBUG));
 
     }
 
     /**
-     *
+     * Starts the recursive walker
      */
     public function start()
     {
