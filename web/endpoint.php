@@ -19,9 +19,9 @@ if ($url !== null) {
     $results = new ResultTree();
 
     $logger = new Logger('DiasporaWalker');
-    $logger->pushHandler(new StreamHandler('../logs/log.txt', Logger::DEBUG));
+    $logger->pushHandler(new StreamHandler('../logs/log.txt', Logger::INFO));
 
-    $logger->addDebug("enpoint.php called with startUrl=".$url);
+    $logger->addInfo("enpoint.php called with startUrl=".$url);
 
     // Creating the recursive walker
     $dispatcher = new DiasporaWalker($logger, $results, $url, DiasporaWalker::MODE_TOROOT);
