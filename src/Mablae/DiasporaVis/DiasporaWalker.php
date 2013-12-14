@@ -1,15 +1,16 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: malte
- * Date: 23.12.12
- * Time: 19:28
- * To change this template use File | Settings | File Templates.
- */
+
+namespace Mablae\DiasporaVis;
+
+use Exception;
+use Guzzle;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 class DiasporaWalker
 {
     const MODE_TOROOT = "toroot"; // Gehe zur Wurzel des Baums
-    const MODE_TREE   = "tree";   // Untersuche den Knoten auf Blatt-Knoten
+    const MODE_TREE = "tree"; // Untersuche den Knoten auf Blatt-Knoten
 
 
     // Holds downloaded data
@@ -34,24 +35,29 @@ class DiasporaWalker
     /**
      * Recursive Walker
      *
+     * @param ResultTree $resultTree
      * @param string $startUrl
      * @param string $mode
      */
-    public function __construct(ResultTree $resultTree, $startUrl = null, $mode = null) {
-           $this->resultTree = $resultTree;
-           $this->cache = array();
-           $this->todo = array();
-           $this->pushTodo($mode, array('url' => $startUrl));
+    public function __construct(ResultTree $resultTree, $startUrl = null, $mode = null)
+    {
+
+        $this->resultTree = $resultTree;
+        $this->cache = array();
+        $this->todo = array();
+        $this->pushTodo($mode, array('url' => $startUrl));
 
 
-
+        $this->logger = new Logger('DiasporaWalker');
+        $this->logger->pushHandler(new StreamHandler('../logs/log.txt', Logger::DEBUG));
 
     }
 
     /**
      *
      */
-    public function start() {
+    public function start()
+    {
         $this->dispatch();
     }
 
@@ -64,21 +70,23 @@ class DiasporaWalker
      */
     private function getUrl($url)
     {
-        if (isset($this->cache[$url])) {
+
+        if ($this->cache[$url]) {
+            $this->logger->addDebug("Returning '" . $url . "' from Cache...");
+
             return $this->cache[$url];
         }
+        try {
+            // Use the static client directly:
+            $this->logger->addDebug("getUrl() tries to download " . $url);
+            $response = Guzzle\Http\StaticClient::get($url);
+        } catch (Exception $e) {
+            $this->logger->addError($e->getMessage());
+        }
+        $this->cache[$url] = $response->getBody();
 
-        $ch = curl_init();
+        return $response->getBody();
 
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $content = curl_exec($ch);
-        curl_close($ch);
-
-        $this->cache[$url] = $content;
-        return $content;
     }
 
     /**
@@ -109,13 +117,14 @@ class DiasporaWalker
      */
     private function buildInteractionsQuery($host, $guid)
     {
-        return "https://$host/posts/$guid/interactions.json";
+
+        $str = "https://$host/posts/$guid/interactions.json";
+        $this->logger->addDebug("buildInteractionsQuery() returns: " . $str);
+
+        return $str;
     }
 
 
-    /**
-     *
-     */
     private function dispatch()
     {
         // Gibt es noch Jobs?
@@ -142,13 +151,17 @@ class DiasporaWalker
      */
     private function crawlToRoot($data)
     {
-        $page = json_decode(
-            $this->getUrl($data['url'])
-        );
+        $this->logger->addDebug("crawlToRoot()", $data);
 
+        $page = $this->getUrl($data['url']);
+        $this->logger->addDebug("Got some json: " . $page);
+
+        $page = json_decode($page);
         // Basisinformationen zum Beitrag
         $host_parts = parse_url($data['url']);
-        $host = $host_parts['host'];
+
+        $host = $host_parts["host"];
+
         $author = $page->author->diaspora_id;
         $guid = $page->guid;
 
@@ -159,31 +172,37 @@ class DiasporaWalker
 
             // Dieser Beitrag ist also ein Reshare.
             // Dann Lege mal die Wurzel zum weiteruntersuchen auf den Stack.
-            $this->pushTodo(MODE_TREE, array(
-                'url' => $this->buildInteractionsQuery($host, $originalGuid),
-                'guid' => $originalGuid,
-                'parent' => '0',
-                'avatar' => $page->root->author->avatar->small
-            ));
+            $this->pushTodo(
+                self::MODE_TREE,
+                array(
+                    'url' => $this->buildInteractionsQuery($host, $originalGuid),
+                    'guid' => $originalGuid,
+                    'parent' => '0',
+                    'avatar' => $page->root->author->avatar->small
+                )
+            );
 
             // Anweisungen fürs Ajax
             return json_encode(
                 array(
                     'command' => 'reload',
-                    'msg' =>  "Reshare: $author teilt Beitrag von $originalAuthor"
+                    'msg' => "Reshare: $author teilt Beitrag von $originalAuthor"
                 )
             );
 
         } else {
             // Der Beitrag ist gar kein Reshare, wir können also gleich mit dem nächsten Schritt weitermachen
-            $this->pushTodo('tree', array(
-                'url' => $this->buildInteractionsQuery($host, $guid),
-                'guid' => $guid,
-                'parent' => '0',
-                'urlPost' => $this->buildPostLink($host, $guid),
-                'urlComments' => $this->buildCommentsLink($host, $guid),
-                'avatar' => $page->author->avatar->small
-            ));
+            $this->pushTodo(
+                'tree',
+                array(
+                    'url' => $this->buildInteractionsQuery($host, $guid),
+                    'guid' => $guid,
+                    'parent' => '0',
+                    'urlPost' => $this->buildPostLink($host, $guid),
+                    'urlComments' => $this->buildCommentsLink($host, $guid),
+                    'avatar' => $page->author->avatar->small
+                )
+            );
 
             $this->dispatch();
         }
@@ -209,12 +228,15 @@ class DiasporaWalker
         // Alle Reshares in die Queue packen
         $info = "";
         foreach ($page->reshares as $reshare) {
-            $this->pushTodo('tree', array(
-                'url' => $this->buildInteractionsQuery($host, $reshare->guid),
-                'guid' => $reshare->guid,
-                'parent' => $data['guid'],
-                'avatar' => $reshare->author->avatar->small
-            ));
+            $this->pushTodo(
+                'tree',
+                array(
+                    'url' => $this->buildInteractionsQuery($host, $reshare->guid),
+                    'guid' => $reshare->guid,
+                    'parent' => $data['guid'],
+                    'avatar' => $reshare->author->avatar->small
+                )
+            );
 
             $info .= "Reshare | ThisGuid: " . $data['guid'] . ' --> ReshareGuid: ' . $reshare->guid . '<br />';
         }
@@ -257,25 +279,29 @@ class DiasporaWalker
             return true;
 
         }
+
         return false;
     }
 
 
     /**
-     * Wrapper method to recieve the results
+     * Wrapper method to receive the results
      *
      * @return string
      */
-    public function getResults() {
+    public function getResults()
+    {
         return $this->resultTree->getJson();
     }
 
     /**
      * @param $host
      * @param $guid
+     *
      */
     private function buildPostLink($host, $guid)
     {
+        return "#";
     }
 
     /**
@@ -284,6 +310,7 @@ class DiasporaWalker
      */
     private function buildCommentsLink($host, $guid)
     {
+        return "#";
     }
 
 }

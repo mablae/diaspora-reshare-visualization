@@ -1,0 +1,32 @@
+#status {
+    width: 400px;
+    height: 600px;
+    overflow: auto;
+    background-color: #eee;
+}
+
+.NodeContent span {
+    margin: 5px;
+    float: right;
+    vertical-align: middle;
+}
+
+.NodeContent img {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+#woods {
+    position: absolute;
+    top: 100px;
+    left: 400px;
+}
+
+#url {
+    width: 400px;
+}

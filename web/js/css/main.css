@@ -16,8 +16,6 @@ html, body {
     color: #dddddd;
 }
 
-
-
 #mainBox {
     /* position: absolute; */
     margin-top: 120px;
@@ -27,7 +25,6 @@ html, body {
 #loader {
 
     display: none;
-
 
 }
 
@@ -41,7 +38,6 @@ html, body {
     fill: none;
 
 }
-
 
 .node-rect {
     fill: #111;
@@ -66,6 +62,7 @@ html, body {
     padding-right: 1em;
     height: 4em;
 }
+
 .textLabel {
     stroke: #08c;
     fill: #00a8f8;
@@ -78,6 +75,7 @@ html, body {
     z-index: 666;
     left: 20px;
     top: 140px;
-    padding: 10px;   position: absolute;
+    padding: 10px;
+    position: absolute;
 
 }

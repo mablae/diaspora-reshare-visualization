@@ -1,0 +1,20 @@
+{
+    "name": "mablae/diaspora-reshare-visualsualization",
+    "license": "MIT",
+    "description": "D3.js powered Graph-Visualation for Reshares of Diaspora Posts.",
+    "require": {
+        "monolog/monolog": "dev-master",
+        "guzzle/guzzle": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Malte Blättermann",
+            "email": "malte.blaettermann@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Mablae\\DiasporaVis": "src/"
+        }
+    }
+}

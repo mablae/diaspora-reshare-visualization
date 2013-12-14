@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 
     var loader = $('#loader');
 
@@ -38,16 +38,15 @@ $(function() {
         var openInfos = function (d) {
 
             d3.select(this).style('stroke-width', 3).style('stroke', '#eeeeee');
-            d3.select('.tooltipDiv').html('<h4>Post ID: ' + d.data.guid.toString() + '</h4><p><img src="'+ d.data.avatar+'" class="tooltipAvatar" /> Reshares: '+d.sumReshares.toString()+'<br>Likes: '+d.sumLikes.toString()+'<br>Comments: '+ d.sumComments.toString()+'</p>');
+            d3.select('.tooltipDiv').html('<h4>Post ID: ' + d.data.guid.toString() + '</h4><p><img src="' + d.data.avatar + '" class="tooltipAvatar" /> Reshares: ' + d.sumReshares.toString() + '<br>Likes: ' + d.sumLikes.toString() + '<br>Comments: ' + d.sumComments.toString() + '</p>');
             tooltipDiv.transition()
                 .duration(300)
                 .style("opacity", 1);
 
 
-
         };
 
-        var openLink = function(d) {
+        var openLink = function (d) {
 
             window.location.href = d.data.linkToPost.toString();
         };
@@ -118,7 +117,7 @@ $(function() {
             node.append("circle")
                 .attr("class", "node-circle")
                 .attr("r", function (d) {
-                    return (Math.sqrt(d.sumComments) +2) * 3
+                    return (Math.sqrt(d.sumComments) + 2) * 3
                 })
                 .style("fill", function (d) {
                     return color(d.group);
@@ -166,13 +165,13 @@ $(function() {
 
         });
     };
-        $('#searchForm').submit(function (e) {
-            e.preventDefault();
-            loader.fadeIn(function () {
-                url = 'endpoint.php?startUrl=' + $('#startUrl').val();
-                createGraph(url);
-            });
+    $('#searchForm').submit(function (e) {
+        e.preventDefault();
+        loader.fadeIn(function () {
+            url = 'endpoint.php?startUrl=' + $('#startUrl').val();
+            createGraph(url);
         });
+    });
 
 });
 

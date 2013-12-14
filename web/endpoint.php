@@ -1,17 +1,16 @@
 <?php
 
-require_once('DiasporaWalker.php');
-require_once('ResultTree.php');
+require_once '../vendor/autoload.php';
+
+use Mablae\DiasporaVis\DiasporaWalker;
+use Mablae\DiasporaVis\ResultTree;
 
 // Set correct json headers and disable caching
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
 
-
-
-$url =  empty($_GET['startUrl']) ? null : $_GET['startUrl'] ;
-//$url = 'https://pod.geraspora.de/posts/966741.json';
+$url = empty($_GET['startUrl']) ? null : $_GET['startUrl'];
 
 if ($url !== null) {
     // create Result Object for DI
@@ -24,8 +23,7 @@ if ($url !== null) {
     // return our json-encoded array
     echo $dispatcher->getResults();
 
-}
-else {
+} else {
     return json_encode(array('error' => true));
 }
 
