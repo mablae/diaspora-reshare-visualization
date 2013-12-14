@@ -19,7 +19,7 @@ if ($url !== null) {
     $results = new ResultTree();
 
     $logger = new Logger('DiasporaWalker');
-    $logger->pushHandler(new StreamHandler('../../../logs/log.txt', Logger::DEBUG));
+    $logger->pushHandler(new StreamHandler('../logs/log.txt', Logger::DEBUG));
 
     $logger->addDebug("enpoint.php called with startUrl=".$url);
 
